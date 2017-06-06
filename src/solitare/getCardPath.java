@@ -1,4 +1,4 @@
-package solitareNew;
+package solitare;
 
 import cards.Cards;
 

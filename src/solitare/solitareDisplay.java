@@ -1,4 +1,4 @@
-package solitareNew;
+package solitare;
 
 import java.awt.Color;
 import java.awt.Component;

@@ -1,4 +1,4 @@
-package solitareNew;
+package solitare;
 
 import java.awt.Component;
 import java.util.Stack;
