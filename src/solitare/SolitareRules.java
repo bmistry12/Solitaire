@@ -99,4 +99,5 @@ public class SolitareRules {
 	{
         new SolitareRules();
 	}
+	
 }
