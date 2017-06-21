@@ -10,13 +10,14 @@ import cards.Cards;
 import cards.Deck;
 
 public class SolitareRules {
-	private solitareDisplay display;
+	private solDisplay display;
+	
 	public SolitareRules(){
-		display = new solitareDisplay(this);
+		display = new solDisplay(this);
 		run();
 	}
-	
-	public Deck startDeck = new Deck();
+	public Deck wasteDeck = new Deck();
+	private Deck startDeck = new Deck();
 	Stack<Cards> col1 = new Stack<Cards>();
 	Stack<Cards> col2 = new Stack<Cards>();
 	Stack<Cards> col3 = new Stack<Cards>();
@@ -62,6 +63,8 @@ public class SolitareRules {
 		col7.push(startDeck.removeTopOfDeck());
 		col7.push(startDeck.removeTopOfDeck());
 		col7.peek().turnUp();
+		wasteDeck = startDeck;
+		System.out.println(wasteDeck);
 	}
 	
 	private void printCurrentCol(){

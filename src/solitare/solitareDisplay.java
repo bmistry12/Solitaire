@@ -89,7 +89,6 @@ public class solitareDisplay extends JFrame implements MouseListener {
 		dealPanel.setVisible(true);
 		mainPanel.setVisible(true);
 		newCard.setIcon(solitareRules.setCard());
-
 		deal.setPreferredSize(new Dimension(60, 20));
 		dealText.setText("Deal");
 		deal.addActionListener(new ActionListener() {
@@ -189,7 +188,7 @@ public class solitareDisplay extends JFrame implements MouseListener {
 	}
 
 	private void dealButtonActionPerformed(ActionEvent evt, SolitareRules solitareRules) {
-		currentCard = solitareRules.startDeck.removeTopOfDeck();
+		currentCard = solitareRules.wasteDeck.removeTopOfDeck();
 		String cardPath = getCardPath.getPath(currentCard);
 		ImageIcon icon = new ImageIcon(cardPath);
 		newCard.setIcon(icon);
@@ -200,6 +199,7 @@ public class solitareDisplay extends JFrame implements MouseListener {
 			String cardPath = getCardPath.getPath(currentCard);
 			ImageIcon icon = new ImageIcon(cardPath);
 			a.setIcon(icon);
+			solitareRules.wasteDeck.removeTopOfDeck();
 		} else {
 			System.err.println("Cannot add a card - no card has been selected");
 		}
