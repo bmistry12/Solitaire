@@ -1,0 +1,23 @@
+# Compiled source #
+*.com
+*.class
+
+# Logs
+*.log
+
+# XMl files
+*.xml
+
+# Package Files 
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+#System Files
+.project
+.classpath
+/bin/
+/.settings/
