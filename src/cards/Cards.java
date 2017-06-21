@@ -9,7 +9,15 @@ public class Cards {
 		this.suit = suit;
 		this.value = value;
 	}
-
+	
+	public String getColour(){
+		if (suit == Suit.CLUBS || suit == Suit.SPADES){
+			return "BLACK";
+		} else {
+			return "RED";
+		}
+	}
+	
 	public Suit getSuit() {
 		return suit;
 	}

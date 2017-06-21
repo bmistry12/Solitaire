@@ -1,21 +1,16 @@
 package solitare;
 
-import java.awt.Component;
 import java.util.Stack;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
 import cards.Cards;
 import cards.Deck;
+import cards.Suit;
 
 public class SolitareRules {
-	private solDisplay display;
 	
 	public SolitareRules(){
-		display = new solDisplay(this);
 		run();
 	}
+	
 	public Deck wasteDeck = new Deck();
 	private Deck startDeck = new Deck();
 	Stack<Cards> col1 = new Stack<Cards>();
@@ -64,32 +59,62 @@ public class SolitareRules {
 		col7.push(startDeck.removeTopOfDeck());
 		col7.peek().turnUp();
 		wasteDeck = startDeck;
-		System.out.println(wasteDeck);
 	}
+	
+	private void printWasteDeck(){
+		System.out.println(wasteDeck);
+		wasteDeck.printDeck();
+	}
+	
+	/*private void printCurrentCol(){
+		System.out.println("1 - " + col1);
+		System.out.println("2 - " + col2);
+		System.out.println("3 - " + col3);
+		System.out.println("4 - " + col4);
+		System.out.println("5 - " + col5);
+		System.out.println("6 - " + col6);
+		System.out.println("7 - " + col7);
+	}*/
 	
 	private void printCurrentCol(){
-		System.out.println(col1);
-		System.out.println(col2);
-		System.out.println(col3);
-		System.out.println(col4);
-		System.out.println(col5);
-		System.out.println(col6);
-		System.out.println(col7);
+		iterateStack(col1);
+		iterateStack(col2);
+		iterateStack(col3);
+		iterateStack(col4);
+		iterateStack(col5);
+		iterateStack(col6);
+		iterateStack(col7);
+		
 	}
 	
-	public Icon setCard() {
-		Cards currentCard = startDeck.removeTopOfDeck();
-		String cardPath = getCardPath.getPath(currentCard);
-		ImageIcon icon = new ImageIcon(cardPath);
-		System.out.println(icon.getIconWidth());
-		System.out.println(icon.getIconHeight());
-		return icon;
+	public void dealCard() {
+		Cards currentCard = wasteDeck.removeTopOfDeck();
+		System.out.println("DealtCard " + currentCard);
 	}
 	
 	
 	public void run() {
+		//System.out.println("--------------- START DECKS ----------------");
 		startDecks();
+		System.out.println("--------------- DEALT CARDS ----------------");
 		printCurrentCol();
+		//System.out.println("--------------- WASTE DECK ----------------");
+		//printWasteDeck();
+		System.out.println("--------------- DEALT CARD ----------------");
+		dealCard();
+	}
+	
+	public void iterateStack(Stack<Cards> s1){
+		String a = "[";
+		for (Cards obj : s1){
+			if (!obj.isFaceUp){
+				a += ("X | ");
+			} else {
+				a+= (obj + " | ");
+			}
+		}
+		a += "]";
+		System.out.println(a);
 	}
 	
 	public static String toString(Stack<Cards> a){
@@ -98,6 +123,18 @@ public class SolitareRules {
 		return astring;
 		
 	}
+	
+	public void addCardToStack(Cards card, Stack<Cards> s1){
+		Cards topOfStack = s1.peek();
+		if (card.getValue().ordinal() == topOfStack.getValue().ordinal() - 1 ){
+			if ((card.getColour() == "RED" && topOfStack.getColour() == "BLACK") || (card.getColour() == "BLACK" && topOfStack.getColour() == "RED")){
+				s1.push(card);
+			} else {
+				System.out.println("Move not allowed");
+			}
+		}
+	}
+	
 	public static void main(String[] args)
 	{
         new SolitareRules();
