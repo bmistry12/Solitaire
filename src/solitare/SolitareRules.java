@@ -1,9 +1,7 @@
 package solitare;
 
 import java.util.Stack;
-import cards.Cards;
-import cards.Deck;
-import cards.Suit;
+import cards.*;
 
 public class SolitareRules {
 	
@@ -13,6 +11,7 @@ public class SolitareRules {
 	
 	public Deck wasteDeck = new Deck();
 	private Deck startDeck = new Deck();
+	//seven piles
 	Stack<Cards> col1 = new Stack<Cards>();
 	Stack<Cards> col2 = new Stack<Cards>();
 	Stack<Cards> col3 = new Stack<Cards>();
@@ -22,6 +21,7 @@ public class SolitareRules {
 	Stack<Cards> col7 = new Stack<Cards>();
 	
 	private void startDecks(){
+		//set up -> shuffle deck and deal out into 7 piles
 		startDeck.shuffleDeck();
 		col1.push(startDeck.removeTopOfDeck());
 		col1.peek().turnUp();
@@ -58,6 +58,7 @@ public class SolitareRules {
 		col7.push(startDeck.removeTopOfDeck());
 		col7.push(startDeck.removeTopOfDeck());
 		col7.peek().turnUp();
+		//let the rest of the start deck now be in a deck called wasteDeck - used to deal cards
 		wasteDeck = startDeck;
 	}
 	
@@ -66,17 +67,8 @@ public class SolitareRules {
 		wasteDeck.printDeck();
 	}
 	
-	/*private void printCurrentCol(){
-		System.out.println("1 - " + col1);
-		System.out.println("2 - " + col2);
-		System.out.println("3 - " + col3);
-		System.out.println("4 - " + col4);
-		System.out.println("5 - " + col5);
-		System.out.println("6 - " + col6);
-		System.out.println("7 - " + col7);
-	}*/
-	
 	private void printCurrentCol(){
+		//prints each pile
 		iterateStack(col1);
 		iterateStack(col2);
 		iterateStack(col3);
@@ -88,43 +80,29 @@ public class SolitareRules {
 	}
 	
 	public void dealCard() {
+		//gets next card from waste pile
 		Cards currentCard = wasteDeck.removeTopOfDeck();
 		System.out.println("DealtCard " + currentCard);
 	}
 	
 	
-	public void run() {
-		//System.out.println("--------------- START DECKS ----------------");
-		startDecks();
-		System.out.println("--------------- DEALT CARDS ----------------");
-		printCurrentCol();
-		//System.out.println("--------------- WASTE DECK ----------------");
-		//printWasteDeck();
-		System.out.println("--------------- DEALT CARD ----------------");
-		dealCard();
-	}
-	
+
 	public void iterateStack(Stack<Cards> s1){
-		String a = "[";
+		//iterate through a stack. If a card if face down display X instead of card details
+		String pile = "[";
 		for (Cards obj : s1){
 			if (!obj.isFaceUp){
-				a += ("X | ");
+				pile += ("X | ");
 			} else {
-				a+= (obj + " | ");
+				pile += (obj + " | ");
 			}
 		}
-		a += "]";
-		System.out.println(a);
-	}
-	
-	public static String toString(Stack<Cards> a){
-		String astring = "";
-		astring = a.pop() + astring;
-		return astring;
-		
+		pile += "]";
+		System.out.println(pile);
 	}
 	
 	public void addCardToStack(Cards card, Stack<Cards> s1){
+		//add a card to the top of a stack if it is a valid move
 		Cards topOfStack = s1.peek();
 		if (card.getValue().ordinal() == topOfStack.getValue().ordinal() - 1 ){
 			if ((card.getColour() == "RED" && topOfStack.getColour() == "BLACK") || (card.getColour() == "BLACK" && topOfStack.getColour() == "RED")){
@@ -135,9 +113,31 @@ public class SolitareRules {
 		}
 	}
 	
-	public static void main(String[] args)
-	{
-        new SolitareRules();
+	public void testing(){ 
+		//testing
+		//System.out.println("--------------- START DECKS ----------------");
+		startDecks();
+		System.out.println("--------------- DEALT CARDS ----------------");
+		printCurrentCol();
+		//System.out.println("--------------- WASTE DECK ----------------");
+		//printWasteDeck();
+		System.out.println("--------------- DEALT CARD ----------------");
+		dealCard();		
 	}
 	
+	public void run() {
+		//currently only testing -> will be implemented with run code
+		testing();
+	}
+	
+	public static String toString(Stack<Cards> a){
+		String astring = "";
+		astring = a.pop() + astring;
+		return astring;
+		
+	}
+	
+	public static void main(String[] args)	{
+        new SolitareRules();
+	}	
 }
