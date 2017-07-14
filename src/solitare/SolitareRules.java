@@ -6,7 +6,7 @@ import cards.*;
 public class SolitareRules {
 	
 	public SolitareRules(){
-		run();
+		setUp();
 	}
 	
 	public Deck wasteDeck = new Deck();
@@ -67,16 +67,15 @@ public class SolitareRules {
 		wasteDeck.printDeck();
 	}
 	
-	private void printCurrentCol(){
+	public void printCurrentCol(){
 		//prints each pile
-		iterateStack(col1);
-		iterateStack(col2);
-		iterateStack(col3);
-		iterateStack(col4);
-		iterateStack(col5);
-		iterateStack(col6);
-		iterateStack(col7);
-		
+		System.out.println("1 ->" + iterateStack(col1));
+		System.out.println("2 ->" + iterateStack(col2));
+		System.out.println("3 ->" + iterateStack(col3));
+		System.out.println("4 ->" + iterateStack(col4));
+		System.out.println("5 ->" + iterateStack(col5));
+		System.out.println("6 ->" + iterateStack(col6));
+		System.out.println("7 ->" + iterateStack(col7));
 	}
 	
 	public void dealCard() {
@@ -86,8 +85,7 @@ public class SolitareRules {
 	}
 	
 	
-
-	public void iterateStack(Stack<Cards> s1){
+	public String iterateStack(Stack<Cards> s1){
 		//iterate through a stack. If a card if face down display X instead of card details
 		String pile = "[";
 		for (Cards obj : s1){
@@ -98,7 +96,7 @@ public class SolitareRules {
 			}
 		}
 		pile += "]";
-		System.out.println(pile);
+		return(pile);
 	}
 	
 	public void addCardToStack(Cards card, Stack<Cards> s1){
@@ -125,9 +123,12 @@ public class SolitareRules {
 		dealCard();		
 	}
 	
-	public void run() {
+	public void setUp() {
 		//currently only testing -> will be implemented with run code
-		testing();
+		//testing();
+		startDecks();
+		printCurrentCol();
+		
 	}
 	
 	public static String toString(Stack<Cards> a){
@@ -136,8 +137,4 @@ public class SolitareRules {
 		return astring;
 		
 	}
-	
-	public static void main(String[] args)	{
-        new SolitareRules();
-	}	
 }

@@ -35,8 +35,8 @@ public class Deck {
 		return deckSize;
 	}
 	
-	public void getTopOfDeck(){
-		System.out.println(cards[deckSize-1]);
+	public Cards getTopOfDeck(){
+		return cards[deckSize-1];
 	}
 	
 	public Cards removeTopOfDeck(){
