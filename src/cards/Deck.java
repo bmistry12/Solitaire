@@ -54,4 +54,8 @@ public class Deck {
 			cards[indexCard2] = tempCard;
 		}				
 	}
+
+	public void addCard(Cards temp) {
+		cards[deckSize+1] = temp;	
+	}
 }

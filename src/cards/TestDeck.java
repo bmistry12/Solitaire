@@ -1,6 +1,6 @@
 package cards;
 
-import solitare.SolitareRules;
+import oldSolitare.SolitareRules;
 
 public class TestDeck {
 	public static void main(String[] args){
