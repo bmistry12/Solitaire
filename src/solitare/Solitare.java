@@ -12,13 +12,13 @@ public class Solitare {
 	private Deck startDeck = new Deck();
 	private Deck stockDeck;
 	private Stack<Cards>[] foundation = (Stack<Cards>[]) new Stack[4];
-	public Stack<Cards> col1 = new Stack<Cards>();
-	public Stack<Cards> col2 = new Stack<Cards>();
-	public Stack<Cards> col3 = new Stack<Cards>();
-	public Stack<Cards> col4 = new Stack<Cards>();
-	public Stack<Cards> col5 = new Stack<Cards>();
-	public Stack<Cards> col6 = new Stack<Cards>();
-	public Stack<Cards> col7 = new Stack<Cards>();
+	public static Stack<Cards> col1 = new Stack<Cards>();
+	public static Stack<Cards> col2 = new Stack<Cards>();
+	public static Stack<Cards> col3 = new Stack<Cards>();
+	public static Stack<Cards> col4 = new Stack<Cards>();
+	public static Stack<Cards> col5 = new Stack<Cards>();
+	public static Stack<Cards> col6 = new Stack<Cards>();
+	public static Stack<Cards> col7 = new Stack<Cards>();
 	private SolitareDisplay display;
 	
 	public Solitare(){
@@ -152,9 +152,8 @@ public class Solitare {
 	}
 
 	public void foundationClicked(int i) {
-		System.out.println("foundation" + i + " clicked");
+		System.err.println("foundation" + i + " clicked");
 		if (display.isWasteSelected()) {
-			System.out.println("here");
 			if (addToFoundation(wasteDeck.peek(), i)){
 				Cards card = wasteDeck.pop();
 				System.err.println(card.getSuit());
@@ -169,6 +168,15 @@ public class Solitare {
 		}
 		if (display.isPileSelected()){
 			System.err.println("foundation clicked display on pile");
+			Stack<Cards> pileSelected = intToPile(display.selectedPile());
+			if(addToFoundation(pileSelected.peek(), i)){
+				Cards cardToMove = pileSelected.pop();
+				foundation[i].push(cardToMove);
+				if(!pileSelected.isEmpty()){
+					pileSelected.peek().turnUp();
+					display.unselect();
+				}
+			}
 		}
 	}
 
@@ -189,9 +197,111 @@ public class Solitare {
 		return isValidMove;
 	}
 
-	public void pileClicked(int col) {
-		// TODO Auto-generated method stub
-		System.out.println("pile clicked " + col);
+	public void pileClicked(Stack<Cards> pile) {
+		System.out.println("pile clicked " + pile.peek().getValue());
+		if (display.isWasteSelected()){
+			Cards temp = wasteDeck.peek();
+			if(canAddToPile(temp, pile)){
+				pile.push(wasteDeck.pop()).turnUp();
+			}
+			display.unselect();
+			display.selectPile(pile);
+		} else if (display.isPileSelected()){
+			int oldPile = display.selectedPile();
+			int selectedPile = pileToInt(pile);
+			if (selectedPile != oldPile){
+				Stack<Cards> toMove = removeFaceUpCards(oldPile);
+				if (canAddToPile(toMove.peek(), pile)){
+					addToPile(toMove, pile);
+					display.unselect();
+				} else {
+					addToPile(toMove, pile);
+					display.unselect();
+					display.selectPile(pile);
+				}
+			
+			} else {
+				display.unselect();
+			}	
+		} else {
+			display.selectPile(pile);
+			pile.peek().turnUp();
+		}
 	}
 
+	private Stack<Cards> removeFaceUpCards(int index) {
+		Stack<Cards> cards = new Stack<Cards>();
+		while(!intToPile(index).isEmpty() && intToPile(index).peek().isFaceUp()){
+			cards.push(intToPile(index).pop());
+		}
+		return cards;
+	}
+
+	private void addToPile(Stack<Cards> toMove, Stack<Cards> pile) {
+		while(!toMove.isEmpty()){
+			pile.push(toMove.pop());
+		}
+		
+	}
+
+	private boolean canAddToPile(Cards card, Stack<Cards> pile) {
+		boolean isValidMove = false;
+		if(pile.isEmpty() && card.getValue().equals(Value.KING)){
+			isValidMove = true;
+		}
+		Cards topOfPile = pile.peek();
+		if(card.getColour() == "RED" && topOfPile.getColour() == "BLACK" ){
+			if(card.valueToInt(card.getValue()) + 1 == topOfPile.valueToInt(topOfPile.getValue())){
+				isValidMove = true;
+			}	
+		}	
+		return isValidMove;
+	}
+	
+	public static int pileToInt(Stack<Cards> pile){
+		int value = -1;
+		if(pile == col1) {
+			value = 0;
+		} else if(pile == col2) {
+			value = 1;
+		} else if(pile == col3) {
+			value = 2;
+		} else if(pile == col4) {
+			value = 3;
+		} else if(pile == col5) {
+			value = 4;
+		} else if(pile == col6) {
+			value = 5;
+		} else if(pile == col7) {
+			value = 6;
+		}
+		return value; 			
+	}
+	
+	public static Stack<Cards> intToPile (int pileIndex){
+		Stack<Cards> temp = null;
+		if(pileIndex == 0) {
+			System.err.println("pile 1 clicked");
+			temp = col1;
+		} else if (pileIndex ==1){
+			System.err.println("pile 2 clicked");
+			temp = col2;
+		} else if (pileIndex ==2){
+			System.err.println("pile 3 clicked");
+			temp = col3;
+		} else if (pileIndex ==3){
+			System.err.println("pile 4 clicked");
+			temp = col4;
+		} else if (pileIndex ==4){
+			System.err.println("pile 5 clicked");
+			temp = col5;
+		} else if (pileIndex ==5){
+			System.err.println("pile 6 clicked");
+			temp = col6;
+		} else if (pileIndex ==6){
+			System.err.println("pile 7 clicked");
+			temp = col7;
+		} 		
+		return temp;
+	}
 }

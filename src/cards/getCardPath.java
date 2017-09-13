@@ -152,64 +152,64 @@ public class getCardPath {
 		case TEN:
 			switch (newcard.getSuit()) {
 			case DIAMONDS:
-				cardPath = "img/d10.gif";
+				cardPath = "img/td.gif";
 				break;
 			case HEARTS:
-				cardPath = "img/h10.gif";
+				cardPath = "img/th.gif";
 				break;
 			case CLUBS:
-				cardPath = "img/c10.gif";
+				cardPath = "img/tc.gif";
 				break;
 			case SPADES:
-				cardPath = "img/s10.gif";
+				cardPath = "img/ts.gif";
 				break;
 			}
 			break;
 		case JACK:
 			switch (newcard.getSuit()) {
 			case DIAMONDS:
-				cardPath = "img/dJ.gif";
+				cardPath = "img/jd.gif";
 				break;
 			case HEARTS:
-				cardPath = "img/hJ.gif";
+				cardPath = "img/jh.gif";
 				break;
 			case CLUBS:
-				cardPath = "img/cJ.gif";
+				cardPath = "img/jc.gif";
 				break;
 			case SPADES:
-				cardPath = "img/sJ.gif";
+				cardPath = "img/js.gif";
 				break;
 			}
 			break;
 		case QUEEN:
 			switch (newcard.getSuit()) {
 			case DIAMONDS:
-				cardPath = "img/dQ.gif";
+				cardPath = "img/qd.gif";
 				break;
 			case HEARTS:
-				cardPath = "img/hQ.gif";
+				cardPath = "img/qh.gif";
 				break;
 			case CLUBS:
-				cardPath = "img/cQ.gif";
+				cardPath = "img/qc.gif";
 				break;
 			case SPADES:
-				cardPath = "img/sQ.gif";
+				cardPath = "img/qs.gif";
 				break;
 			}
 			break;
 		case KING:
 			switch (newcard.getSuit()) {
 			case DIAMONDS:
-				cardPath = "img/dK.gif";
+				cardPath = "img/kd.gif";
 				break;
 			case HEARTS:
-				cardPath = "img/hK.gif";
+				cardPath = "img/kh.gif";
 				break;
 			case CLUBS:
-				cardPath = "img/cK.gif";
+				cardPath = "img/kc.gif";
 				break;
 			case SPADES:
-				cardPath = "img/sK.gif";
+				cardPath = "img/ks.gif";
 				break;
 			}
 			break;
