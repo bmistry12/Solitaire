@@ -39,7 +39,7 @@ public class Cards {
 			value = 5;
 			break;
 		case FOUR:
-			value = 5;
+			value = 4;
 			break;
 		case JACK:
 			value = 11;

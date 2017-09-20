@@ -63,8 +63,6 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		//piles
 		int offset = 0;
 		Stack<Cards> pile = solitare.getPile(Solitare.col1);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * i, CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
@@ -79,10 +77,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 		offset = 0;
 		pile = solitare.getPile(Solitare.col2);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile2 size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
-			System.err.println(pile.get(i).getValue());
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
@@ -96,10 +91,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 		offset = 0;
 		pile = solitare.getPile(Solitare.col3);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile2 size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
-			System.err.println(pile.get(i).getValue());
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
@@ -113,10 +105,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 		offset = 0;
 		pile = solitare.getPile(Solitare.col4);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile2 size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
-			System.err.println(pile.get(i).getValue());
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
@@ -130,10 +119,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 		offset = 0;
 		pile = solitare.getPile(Solitare.col5);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile2 size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
-			System.err.println(pile.get(i).getValue());
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
@@ -147,10 +133,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 		offset = 0;
 		pile = solitare.getPile(Solitare.col6);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile2 size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
-			System.err.println(pile.get(i).getValue());
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
@@ -164,10 +147,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 		offset = 0;
 		pile = solitare.getPile(Solitare.col7);
-		System.err.println(solitare.iterateStack(pile));
-		System.err.println("pile2 size " + pile.size());
 		for(int i = 0; i < pile.size(); i++){
-			System.err.println(pile.get(i).getValue());
 			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
@@ -188,7 +168,6 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 			g.drawRect(x, y, CARD_WIDTH, CARD_HEIGHT);
 		} else {
 			String filename = card.getFileName(card);
-			System.err.println(filename);
 			Image image = new ImageIcon(filename).getImage();
 			g.drawImage(image, x, y, CARD_WIDTH, CARD_HEIGHT, null);
 		}
@@ -196,7 +175,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 	
 	private void drawBorder(Graphics g, int x, int y)
 	{
-		g.setColor(Color.YELLOW);
+		g.setColor(Color.BLACK);
 		g.drawRect(x, y, CARD_WIDTH, CARD_HEIGHT);
 		g.drawRect(x + 1, y + 1, CARD_WIDTH - 2, CARD_HEIGHT - 2);
 		g.drawRect(x + 2, y + 2, CARD_WIDTH - 4, CARD_HEIGHT - 4);
@@ -213,6 +192,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		if (col > 6){
 			col = 6;
 		}*/
+		
 		if (row == 0 && col == 0){
 			solitare.stockDeck();
 		} else if (row == 0 && col == 1) {

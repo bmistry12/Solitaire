@@ -1,5 +1,6 @@
 package solitare;
 
+import java.awt.Color;
 import java.util.Stack;
 
 import cards.Cards;
@@ -29,10 +30,11 @@ public class Solitare {
 	
 	public Cards getStockCard(){
 		if(stockDeck.getDeckSize() == 0){
-			return null;
+			resetStock();
+			return stockDeck.getTopOfDeck();
 		} else {
 			return stockDeck.getTopOfDeck();
-		}
+		}	
 	}
 	
 	public Cards getWasteCard(){
@@ -56,10 +58,12 @@ public class Solitare {
 	}
 	
 	public void resetStock(){
-		while(!(wasteDeck.size()==0)){
-			Cards temp = wasteDeck.pop();
-			temp.turnDown();
-			stockDeck.addCard(temp);
+		System.out.println("Resetting stocks");
+		while (! (wasteDeck.isEmpty())){
+			Cards toMove = wasteDeck.pop();
+			toMove.turnDown();
+			stockDeck.addCard(toMove);
+			stockDeck.increaseDeckSize();
 		}
 	}
 	
@@ -67,6 +71,7 @@ public class Solitare {
 		if(! (stockDeck.getDeckSize() == 0)){
 			Cards temp = stockDeck.removeTopOfDeck();
 			wasteDeck.push(temp).turnUp();
+			System.out.println("Cardbeingdealt " + temp.getValue() + " " + temp.getSuit());
 		}
 	}
 	
@@ -133,6 +138,7 @@ public class Solitare {
 		display.unselect();
 		if(!display.isWasteSelected() && !display.isPileSelected()){
 			if (stockDeck.getDeckSize() == 0){
+				System.out.println("Stock deck is empty");
 				resetStock();
 			} else {
 				dealCard();
@@ -156,7 +162,6 @@ public class Solitare {
 		if (display.isWasteSelected()) {
 			if (addToFoundation(wasteDeck.peek(), i)){
 				Cards card = wasteDeck.pop();
-				System.err.println(card.getSuit());
 				if (foundation[i] == null){
 					foundation[i] = new Stack<Cards>();
 				}
@@ -171,6 +176,9 @@ public class Solitare {
 			Stack<Cards> pileSelected = intToPile(display.selectedPile());
 			if(addToFoundation(pileSelected.peek(), i)){
 				Cards cardToMove = pileSelected.pop();
+				if (foundation[i] == null){
+					foundation[i] = new Stack<Cards>();
+				}
 				foundation[i].push(cardToMove);
 				if(!pileSelected.isEmpty()){
 					pileSelected.peek().turnUp();
@@ -198,14 +206,18 @@ public class Solitare {
 	}
 
 	public void pileClicked(Stack<Cards> pile) {
-		System.out.println("pile clicked " + pile.peek().getValue());
+		//System.out.println("pile clicked " + pile.peek().getValue());
 		if (display.isWasteSelected()){
-			Cards temp = wasteDeck.peek();
-			if(canAddToPile(temp, pile)){
-				pile.push(wasteDeck.pop()).turnUp();
+			Cards cardToMove = wasteDeck.peek();
+			System.out.println("IS ALLOWED " + canAddToPile(cardToMove, pile));
+			if(canAddToPile(cardToMove, pile) == true){
+				pile.push(wasteDeck.pop());
+			} else {
+				System.out.println("Cannot add to pile");
 			}
 			display.unselect();
 			display.selectPile(pile);
+			///////
 		} else if (display.isPileSelected()){
 			int oldPile = display.selectedPile();
 			int selectedPile = pileToInt(pile);
@@ -213,9 +225,13 @@ public class Solitare {
 				Stack<Cards> toMove = removeFaceUpCards(oldPile);
 				if (canAddToPile(toMove.peek(), pile)){
 					addToPile(toMove, pile);
+					if(!intToPile(oldPile).isEmpty()){
+						intToPile(oldPile).peek().turnUp();
+					}
 					display.unselect();
 				} else {
-					addToPile(toMove, pile);
+					System.err.println("invalid move");
+					addToPile(toMove, intToPile(oldPile));
 					display.unselect();
 					display.selectPile(pile);
 				}
@@ -246,15 +262,29 @@ public class Solitare {
 
 	private boolean canAddToPile(Cards card, Stack<Cards> pile) {
 		boolean isValidMove = false;
-		if(pile.isEmpty() && card.getValue().equals(Value.KING)){
+		System.err.println("can add to pile " + card.getValue());
+		System.err.println("can add to pile boolean " + card.getValue().equals(Value.KING));
+		
+		if(pile.isEmpty() && (card.getValue().equals(Value.KING))){
+			System.out.println("king and that ");
 			isValidMove = true;
+		} else{
+			Cards topOfPile = pile.peek();
+			System.out.println("can add to pile check " + topOfPile.getValue() + " " + topOfPile.getColour());
+			System.out.println("can add to pile check card to move " + card.getValue() + " " + card.getColour());
+			if(card.getColour() == "RED" && topOfPile.getColour() == "BLACK"){
+				if((card.valueToInt(card.getValue())+1) == topOfPile.valueToInt(topOfPile.getValue())){
+					isValidMove = true;
+				}
+			} else if(card.getColour() == "BLACK" && topOfPile.getColour() == "RED"){
+				if((card.valueToInt(card.getValue())+1) == topOfPile.valueToInt(topOfPile.getValue())){
+					isValidMove = true;
+				}
+			} else { 
+				System.out.println("** INVALID MOVE ** ");
+			}
 		}
-		Cards topOfPile = pile.peek();
-		if(card.getColour() == "RED" && topOfPile.getColour() == "BLACK" ){
-			if(card.valueToInt(card.getValue()) + 1 == topOfPile.valueToInt(topOfPile.getValue())){
-				isValidMove = true;
-			}	
-		}	
+		System.out.println("IS VALID MOVE?? " + isValidMove);
 		return isValidMove;
 	}
 	
@@ -283,22 +313,22 @@ public class Solitare {
 		if(pileIndex == 0) {
 			System.err.println("pile 1 clicked");
 			temp = col1;
-		} else if (pileIndex ==1){
+		} else if (pileIndex == 1){
 			System.err.println("pile 2 clicked");
 			temp = col2;
-		} else if (pileIndex ==2){
+		} else if (pileIndex == 2){
 			System.err.println("pile 3 clicked");
 			temp = col3;
-		} else if (pileIndex ==3){
+		} else if (pileIndex == 3){
 			System.err.println("pile 4 clicked");
 			temp = col4;
-		} else if (pileIndex ==4){
+		} else if (pileIndex == 4){
 			System.err.println("pile 5 clicked");
 			temp = col5;
-		} else if (pileIndex ==5){
+		} else if (pileIndex == 5){
 			System.err.println("pile 6 clicked");
 			temp = col6;
-		} else if (pileIndex ==6){
+		} else if (pileIndex == 6){
 			System.err.println("pile 7 clicked");
 			temp = col7;
 		} 		

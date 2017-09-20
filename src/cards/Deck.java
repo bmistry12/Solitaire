@@ -5,7 +5,7 @@ public class Deck {
 	private Cards cards[];
 	private Suit suits[];
 	private Value values[];
-	private int deckSize;
+	private int deckSize = 0;
 	
 	public Deck(){
 		cards = new Cards[52];
@@ -53,6 +53,10 @@ public class Deck {
 			cards[indexCard1] = cards[indexCard2];
 			cards[indexCard2] = tempCard;
 		}				
+	}
+	
+	public void increaseDeckSize(){
+		deckSize++;
 	}
 
 	public void addCard(Cards temp) {
