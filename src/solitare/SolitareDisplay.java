@@ -41,7 +41,7 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 	}
 	//draw display
 	public void paintComponent(Graphics g){
-		//bckgrd
+		//background
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		//

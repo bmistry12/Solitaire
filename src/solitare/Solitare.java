@@ -1,17 +1,15 @@
 package solitare;
 
-import java.awt.Color;
 import java.util.Stack;
-
 import cards.Cards;
 import cards.Deck;
-import cards.Suit;
 import cards.Value;
 
 public class Solitare {
 	private Stack<Cards> wasteDeck = new Stack<Cards>();
 	private Deck startDeck = new Deck();
 	private Deck stockDeck;
+	@SuppressWarnings("unchecked")
 	private Stack<Cards>[] foundation = (Stack<Cards>[]) new Stack[4];
 	public static Stack<Cards> col1 = new Stack<Cards>();
 	public static Stack<Cards> col2 = new Stack<Cards>();
@@ -206,10 +204,10 @@ public class Solitare {
 	}
 
 	public void pileClicked(Stack<Cards> pile) {
-		//System.out.println("pile clicked " + pile.peek().getValue());
+		System.out.println("pile clicked " + pileToInt(pile));
 		if (display.isWasteSelected()){
 			Cards cardToMove = wasteDeck.peek();
-			System.out.println("IS ALLOWED " + canAddToPile(cardToMove, pile));
+			//System.out.println("IS ALLOWED " + canAddToPile(cardToMove, pile));
 			if(canAddToPile(cardToMove, pile) == true){
 				pile.push(wasteDeck.pop());
 			} else {
@@ -217,10 +215,12 @@ public class Solitare {
 			}
 			display.unselect();
 			display.selectPile(pile);
-			///////
+			//
 		} else if (display.isPileSelected()){
 			int oldPile = display.selectedPile();
+			System.out.println(oldPile);
 			int selectedPile = pileToInt(pile);
+			System.out.println(selectedPile);
 			if (selectedPile != oldPile){
 				Stack<Cards> toMove = removeFaceUpCards(oldPile);
 				if (canAddToPile(toMove.peek(), pile)){
