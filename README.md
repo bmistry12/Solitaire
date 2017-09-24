@@ -1,6 +1,7 @@
-## Solitare ##
-This is the code for my implementation in Java of Solitare.
-Originally I was creating a GUI based solitare game, however have switched my focus to completing a command line based game.
-Once this is complete I may start working on the GUI once more (hence why the GUI branch exists)
+## Collection of Card Games ##
+This is the code for my implementation of various card games in Java.
+
+Currently I have a working version of Solitare - There is a slight glitch that is still being worked on however.
+I am looking to add more games in due course
 
 -- Currently In Development --
