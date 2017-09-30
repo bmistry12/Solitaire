@@ -93,7 +93,7 @@ public class Home extends javax.swing.JFrame {
 	}
 
 	private void chooseSolitareActionPerformed(java.awt.event.ActionEvent evt) {
-		solitare.Main.main(null);
+		solitare.RunSolitare.main(null);
 	}
 
 

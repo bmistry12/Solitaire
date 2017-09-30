@@ -1,6 +1,6 @@
 package solitare;
 
-public class Main {
+public class RunSolitare {
 	public static void main (String[] args){
 		Solitare solitare = new Solitare();
 		
