@@ -9,7 +9,6 @@ public class Home extends javax.swing.JFrame {
 	private javax.swing.JButton chooseSolitare;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JMenu jMenu1;
-	private javax.swing.JMenu jMenu2;
 	private javax.swing.JMenuBar jMenuBar1;
 	private javax.swing.JMenuItem jMenuItem1;
 	private javax.swing.JPanel jPanel1;
@@ -25,18 +24,17 @@ public class Home extends javax.swing.JFrame {
 		jMenuBar1 = new javax.swing.JMenuBar();
 		jMenu1 = new javax.swing.JMenu();
 		jMenuItem1 = new javax.swing.JMenuItem();
-		jMenu2 = new javax.swing.JMenu();
-
+		
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-		jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 14)); // NOI18N
-		jLabel1.setText("WELCOME. Please choose a card game to play.");
+		jLabel1.setFont(new java.awt.Font("Copperplate Gothic Light", 0, 16)); 
+		jLabel1.setText("WELCOME");
+		jLabel1.setText("<html>WELCOME<br/>Please choose a card game to play</html>");
 
-		chooseSolitare.setIcon(new javax.swing.ImageIcon("img/buttons/solitare.gif")); // NOI18N
-		chooseSolitare.setText("SOLITARE");
+		chooseSolitare.setIcon(new javax.swing.ImageIcon("img/buttons/solitare.gif"));
 		chooseSolitare.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		chooseSolitare.setActionCommand("Solitare");
-		chooseSolitare.setBackground(new java.awt.Color(255, 255, 255));
+		chooseSolitare.setBackground(new java.awt.Color(0, 0, 0));
 		chooseSolitare.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				chooseSolitareActionPerformed(evt);
@@ -70,14 +68,9 @@ public class Home extends javax.swing.JFrame {
 			}
 		});
 		jMenu1.add(jMenuItem1);
-
 		jMenuBar1.add(jMenu1);
 
-		jMenu2.setText("Edit");
-		jMenuBar1.add(jMenu2);
-
-		setJMenuBar(jMenuBar1);
-
+		
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
@@ -86,7 +79,7 @@ public class Home extends javax.swing.JFrame {
 				jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
 		pack();
-	}// </editor-fold>
+	}
 
 	private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
 		System.exit(0);
