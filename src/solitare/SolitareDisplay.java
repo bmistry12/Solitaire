@@ -14,7 +14,13 @@ import javax.swing.JFrame;
 
 import cards.Cards;
 
+@SuppressWarnings("serial")
 public class SolitareDisplay extends JComponent implements MouseListener {
+	/**
+	 * Stock Deck - Left over after cards are dealt 
+	 * Waste Deck - Cards taken off stock deck
+	 * Foundation Piles - Ace upwards for each suit
+	 */
 	private static final int CARD_WIDTH = 73;
 	private static final int CARD_HEIGHT = 97;
 	private static int spacing = 5;
@@ -39,32 +45,28 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		frame.pack();
 		frame.setVisible(true);
 	}
+	
 	//draw display
 	public void paintComponent(Graphics g){
 		//background
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		//
-
 		//face down
 		drawCard(g, solitare.getStockCard(), spacing, spacing);
-
 		//stock
 		drawCard(g, solitare.getWasteCard(), spacing * 2 + CARD_WIDTH, spacing);
 		if (selectedRow == 0 && selectedCol == 1) {
 			drawBorder(g, spacing * 2 + CARD_WIDTH, spacing);
 		}
-
 		//aces
 		for (int i = 0; i < 4; i++) {
 			drawCard(g, solitare.getFoundCard(i), spacing * (4 + i) + CARD_WIDTH * (3 + i), spacing);
 		}
-
 		//piles
 		int offset = 0;
 		Stack<Cards> pile = solitare.getPile(Solitare.col1);
 		for(int i = 0; i < pile.size(); i++){
-			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * i, CARD_HEIGHT + 2 * spacing + offset);
+			drawCard(g, pile.get(i), spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			if (selectedRow == 1 && selectedCol == Solitare.pileToInt(pile) && i == pile.size() - 1) {
 				drawBorder(g, spacing + (CARD_WIDTH + spacing) * Solitare.pileToInt(pile), CARD_HEIGHT + 2 * spacing + offset);
 			}
@@ -162,8 +164,9 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 				
 	}
 	
-	private void drawCard(Graphics g,  Cards card, int x, int y){
-		if(card == null){
+	private void drawCard(Graphics g,  Cards card, int x, int y) {
+	//draw each card
+		if(card == null) {
 			g.setColor(Color.BLACK);
 			g.drawRect(x, y, CARD_WIDTH, CARD_HEIGHT);
 		} else {
@@ -173,8 +176,8 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 		}
 	}
 	
-	private void drawBorder(Graphics g, int x, int y)
-	{
+	private void drawBorder(Graphics g, int x, int y) {
+	//black border for each card
 		g.setColor(Color.BLACK);
 		g.drawRect(x, y, CARD_WIDTH, CARD_HEIGHT);
 		g.drawRect(x + 1, y + 1, CARD_WIDTH - 2, CARD_HEIGHT - 2);
@@ -183,16 +186,9 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent click) {
+	//when mouse is clicked carry out relevant method depedning on what has been clicked and then redraw the gui
 		int col = click.getX() / (spacing + CARD_WIDTH);
 		int row = click.getY() / (spacing + CARD_HEIGHT);
-		/*y can only be 0 to 1 and over 6 along x is out of bounds
-		if (row > 1) {
-			row = 1;
-		}
-		if (col > 6){
-			col = 6;
-		}*/
-		
 		if (row == 0 && col == 0){
 			solitare.stockDeck();
 		} else if (row == 0 && col == 1) {
@@ -203,65 +199,58 @@ public class SolitareDisplay extends JComponent implements MouseListener {
 			Stack<Cards> temp = Solitare.intToPile(col);
 			solitare.pileClicked(temp);			
 		}	
-		repaint();
-		
+		repaint();	
 	}
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	//
-	public void unselect()
-	{
+	
+	public void unselect() {
 		selectedRow = -1;
 		selectedCol = -1;
 	}
 
-	public boolean isWasteSelected()
-	{
+	public boolean isWasteSelected() {
 		return selectedRow == 0 && selectedCol == 1;
 	}
 
-	public void selectWaste()
-	{
+	public void selectWaste()	{
 		selectedRow = 0;
 		selectedCol = 1;
 	}
 
-	public boolean isPileSelected()
-	{
+	public boolean isPileSelected() {
 		return selectedRow == 1;
 	}
 
-	public int selectedPile()
-	{
-		if (selectedRow == 1)
+	public int selectedPile() {
+		if (selectedRow == 1) {
 			return selectedCol;
-		else
+		} else {
 			return -1;
+		}
 	}
 
-	public void selectPile(Stack<Cards> pile)
-	{
+	public void selectPile(Stack<Cards> pile)	{
 		selectedRow = 1;
-		selectedCol= Solitare.pileToInt(pile);
-		
+		selectedCol= Solitare.pileToInt(pile);	
 	}
+	
+	//unused methods
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub	
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub	
+	}
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub	
+	}
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+	
+	
 }
 
