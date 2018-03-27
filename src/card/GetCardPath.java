@@ -1,7 +1,13 @@
-package cards;
-import cards.Cards;
+package card;
+import card.Cards;
 
-public class getCardPath {
+/**
+ * Gets file path for the cards image
+ * @author bhavi
+ *
+ */
+public class GetCardPath {
+	
 	public static String getPath (Cards newcard){
 		String cardPath = "";
 		switch (newcard.getValue()) {

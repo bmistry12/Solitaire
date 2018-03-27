@@ -1,7 +1,3 @@
-## Collection of Card Games ##
-This is the code for my implementation of various card games in Java.
+## Solitare Card Games ##
 
-Working Games:
-* Solitare
-
--- In Development --
+Implementation of Solitare using Java.
