@@ -1,14 +1,16 @@
-package solitare;
+package solitaire;
 
 import java.util.Stack;
+
+import base.BaseSolitare;
 import card.*;
 
 /**
- * The logic for the solitare game
+ * The logic for the solitaire game
  * @author bhavi
  *
  */
-public class Solitare {
+public class Solitaire extends BaseSolitare {
 
 	public static Stack<Cards> col1 = new Stack<Cards>();
 	public static Stack<Cards> col2 = new Stack<Cards>();
@@ -22,16 +24,53 @@ public class Solitare {
 	private Deck startDeck;
 	private Deck stockDeck;
 	private Stack<Cards>[] foundation;
-	private SolitareDisplay display;
+	private SolitaireDisplay display;
 
-	public Solitare() {
+	public Solitaire() {
 		startDeck = new Deck();
 		foundation = (Stack<Cards>[]) new Stack[4];
-		display = new SolitareDisplay(this);
+		display = new SolitaireDisplay(this);
 		deal();
 		printCurrentCol();
 	}
-
+	
+	//
+	public Stack<Cards> getColumn1(){
+		return col1;
+	}
+	public Stack<Cards> getColumn2(){
+		return col2;
+	}
+	public Stack<Cards> getColumn3(){
+		return col3;
+	}
+	public Stack<Cards> getColumn4(){
+		return col4;
+	}
+	public Stack<Cards> getColumn5(){
+		return col5;
+	}
+	public Stack<Cards> getColumn6(){
+		return col6;
+	}
+	public Stack<Cards> getColumn7(){
+		return col7;
+	}
+	/**
+	 * Get waste deck
+	 * @return
+	 */
+	public Stack<Cards> getWasteDeck(){
+		return wasteDeck;
+	}
+	
+	/**
+	 * Get stock deck
+	 */
+	public Deck getStockDeck(){
+		return stockDeck;
+	}
+	
 	/**
 	 * Return top card on stock deck
 	 * 
