@@ -1,5 +1,7 @@
 package card;
 
+import java.util.Objects;
+
 /**
  * Represents a card
  * 
@@ -144,7 +146,27 @@ public class Cards {
 	/**
 	 * toString method for a card
 	 */
+	@Override
 	public String toString() {
 		return value + " of " + suit;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if (o == this){
+			return true;
+		}
+		if (o instanceof Cards){
+			Cards card = (Cards) o;
+			if((card.getSuit() == this.getSuit()) && (card.getValue() == this.getValue())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		return Objects.hash(suit, value);
 	}
 }

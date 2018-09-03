@@ -1,5 +1,6 @@
 package solitaire;
 
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Stack;
@@ -17,21 +18,21 @@ import card.Cards;
  */
 public class SolitaireDisplay extends AbstractDisplay implements MouseListener {
 
-	private Solitaire solitare;
+	private Solitaire solitaire;
 
 	/**
 	 * Create a new solitaire window
 	 * 
 	 * @param solitaire
 	 */
-	public SolitaireDisplay(Solitaire solitare) {
-		super(solitare);
-		this.solitare = solitare;
+	public SolitaireDisplay(Solitaire solitaire) {
+		super(solitaire);
+		this.solitaire = solitaire;
 		this.addMouseListener(this);
 	}
 
 	/**
-	 * when mouse is clicked carry out relevant method depedning on what has
+	 * When mouse is clicked carry out relevant method depending on what has
 	 * been clicked and then redraw the gui
 	 */
 	@Override
@@ -39,16 +40,19 @@ public class SolitaireDisplay extends AbstractDisplay implements MouseListener {
 		int col = click.getX() / (spacing + CARD_WIDTH);
 		int row = click.getY() / (spacing + CARD_HEIGHT);
 		if (row == 0 && col == 0) {
-			solitare.stockDeck();
+			solitaire.stockDeck();
 		} else if (row == 0 && col == 1) {
-			solitare.wasteCardClicked();
+			solitaire.wasteCardClicked();
 		} else if (row == 0 && col >= 3) {
-			solitare.foundationClicked(col - 3);
+			solitaire.foundationClicked(col - 3);
 		} else if (row == 1) {
 			Stack<Cards> temp = Solitaire.intToPile(col);
-			solitare.pileClicked(temp);
+			solitaire.pileClicked(temp);
 		}
 		repaint();
+		if (solitaire.checkForEndGame()) {
+			endGame(1);
+		}
 	}
 
 	/**
@@ -108,6 +112,22 @@ public class SolitaireDisplay extends AbstractDisplay implements MouseListener {
 		selectedCol = Solitaire.pileToInt(pile);
 	}
 
+	/**
+	 * Get the solitaire game
+	 * 
+	 * @return
+	 */
+	public Solitaire getGame() {
+		return solitaire;
+	}
+
+	@Override
+	public void endGame(int complete) {
+		System.err.println("EndGame");
+		solitaire.getTimer().endGame();
+		new EndDialog(this.getFrame(), this.getGame(), complete);
+	}
+
 	// unused methods
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
@@ -128,5 +148,4 @@ public class SolitaireDisplay extends AbstractDisplay implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 	}
-
 }

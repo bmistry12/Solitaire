@@ -2,6 +2,7 @@ package card;
 
 /**
  * Card suit enum
+ * 
  * @author bhavi
  *
  */

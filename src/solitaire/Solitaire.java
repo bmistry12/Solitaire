@@ -2,15 +2,19 @@ package solitaire;
 
 import java.util.Stack;
 
-import base.BaseSolitare;
-import card.*;
+import base.AbstractSolitaire;
+import card.Cards;
+import card.Deck;
+import card.Value;
+import main.Timer;
 
 /**
  * The logic for the solitaire game
+ * 
  * @author bhavi
  *
  */
-public class Solitaire extends BaseSolitare {
+public class Solitaire extends AbstractSolitaire {
 
 	public static Stack<Cards> col1 = new Stack<Cards>();
 	public static Stack<Cards> col2 = new Stack<Cards>();
@@ -26,51 +30,83 @@ public class Solitaire extends BaseSolitare {
 	private Stack<Cards>[] foundation;
 	private SolitaireDisplay display;
 
+	private Timer timer;
+	private int moves;
+
+	/**
+	 * Constructor to create a new game of solitaire
+	 */
 	public Solitaire() {
 		startDeck = new Deck();
 		foundation = (Stack<Cards>[]) new Stack[4];
 		display = new SolitaireDisplay(this);
 		deal();
 		printCurrentCol();
+		timer = new Timer();
+		moves = 0;
 	}
-	
-	//
-	public Stack<Cards> getColumn1(){
-		return col1;
-	}
-	public Stack<Cards> getColumn2(){
-		return col2;
-	}
-	public Stack<Cards> getColumn3(){
-		return col3;
-	}
-	public Stack<Cards> getColumn4(){
-		return col4;
-	}
-	public Stack<Cards> getColumn5(){
-		return col5;
-	}
-	public Stack<Cards> getColumn6(){
-		return col6;
-	}
-	public Stack<Cards> getColumn7(){
-		return col7;
-	}
+
 	/**
-	 * Get waste deck
+	 * Get all the piles
+	 * 
 	 * @return
 	 */
-	public Stack<Cards> getWasteDeck(){
+	public Stack<Stack<Cards>> getAllPiles() {
+		Stack<Stack<Cards>> all = new Stack<Stack<Cards>>();
+		all.push(col1);
+		all.push(col2);
+		all.push(col3);
+		all.push(col4);
+		all.push(col5);
+		all.push(col6);
+		all.push(col7);
+		return all;
+	}
+
+	public Stack<Cards> getColumn1() {
+		return col1;
+	}
+
+	public Stack<Cards> getColumn2() {
+		return col2;
+	}
+
+	public Stack<Cards> getColumn3() {
+		return col3;
+	}
+
+	public Stack<Cards> getColumn4() {
+		return col4;
+	}
+
+	public Stack<Cards> getColumn5() {
+		return col5;
+	}
+
+	public Stack<Cards> getColumn6() {
+		return col6;
+	}
+
+	public Stack<Cards> getColumn7() {
+		return col7;
+	}
+
+	/**
+	 * Get waste deck
+	 * 
+	 * @return
+	 */
+	public Stack<Cards> getWasteDeck() {
 		return wasteDeck;
 	}
-	
+
 	/**
 	 * Get stock deck
 	 */
-	public Deck getStockDeck(){
+	public Deck getStockDeck() {
 		return stockDeck;
 	}
-	
+
 	/**
 	 * Return top card on stock deck
 	 * 
@@ -154,34 +190,17 @@ public class Solitaire extends BaseSolitare {
 	 */
 	private void deal() {
 		startDeck.shuffleDeck();
-		col1.push(startDeck.removeTopOfDeck()).turnUp();
-		col2.push(startDeck.removeTopOfDeck());
-		col2.push(startDeck.removeTopOfDeck()).turnUp();
-		col3.push(startDeck.removeTopOfDeck());
-		col3.push(startDeck.removeTopOfDeck());
-		col3.push(startDeck.removeTopOfDeck()).turnUp();
-		col4.push(startDeck.removeTopOfDeck());
-		col4.push(startDeck.removeTopOfDeck());
-		col4.push(startDeck.removeTopOfDeck());
-		col4.push(startDeck.removeTopOfDeck()).turnUp();
-		col5.push(startDeck.removeTopOfDeck());
-		col5.push(startDeck.removeTopOfDeck());
-		col5.push(startDeck.removeTopOfDeck());
-		col5.push(startDeck.removeTopOfDeck());
-		col5.push(startDeck.removeTopOfDeck()).turnUp();
-		col6.push(startDeck.removeTopOfDeck());
-		col6.push(startDeck.removeTopOfDeck());
-		col6.push(startDeck.removeTopOfDeck());
-		col6.push(startDeck.removeTopOfDeck());
-		col6.push(startDeck.removeTopOfDeck());
-		col6.push(startDeck.removeTopOfDeck()).turnUp();
-		col7.push(startDeck.removeTopOfDeck());
-		col7.push(startDeck.removeTopOfDeck());
-		col7.push(startDeck.removeTopOfDeck());
-		col7.push(startDeck.removeTopOfDeck());
-		col7.push(startDeck.removeTopOfDeck());
-		col7.push(startDeck.removeTopOfDeck());
-		col7.push(startDeck.removeTopOfDeck()).turnUp();
+		Stack<Stack<Cards>> all = getAllPiles();
+		int count = 1;
+		for (Stack<Cards> pile : all) {
+			for (int i = 1; i <= count; i++) {
+				pile.push(startDeck.removeTopOfDeck());
+				if (i == count) {
+					pile.peek().turnUp();
+				}
+			}
+			count++;
+		}
 		stockDeck = startDeck;
 	}
 
@@ -233,6 +252,7 @@ public class Solitaire extends BaseSolitare {
 				dealCard();
 			}
 		}
+		moves += 1;
 	}
 
 	/**
@@ -248,6 +268,7 @@ public class Solitaire extends BaseSolitare {
 				display.unselect();
 			}
 		}
+		moves += 1;
 	}
 
 	/**
@@ -285,6 +306,7 @@ public class Solitaire extends BaseSolitare {
 				}
 			}
 		}
+		moves += 1;
 	}
 
 	/**
@@ -353,6 +375,7 @@ public class Solitaire extends BaseSolitare {
 			display.selectPile(pile);
 			pile.peek().turnUp();
 		}
+		moves += 1;
 	}
 
 	/**
@@ -470,5 +493,38 @@ public class Solitaire extends BaseSolitare {
 			temp = col7;
 		}
 		return temp;
+	}
+
+	/**
+	 * Check to see if the game is finished yet - checks to see if the waste
+	 * deck is empty and that all of the foundation piles are complete
+	 * 
+	 * @return
+	 */
+	public boolean checkForEndGame() {
+		if (wasteDeck.isEmpty()) {
+			for (Stack<Cards> found : foundation) {
+				if (found == null) {
+					return false;
+				} else if (!(found.size() == 13)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the games timer
+	 * 
+	 * @return
+	 */
+	public Timer getTimer() {
+		return this.timer;
+	}
+
+	public int getMoves() {
+		return this.moves;
 	}
 }

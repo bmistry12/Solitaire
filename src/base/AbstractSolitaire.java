@@ -1,15 +1,15 @@
 package base;
 
 import java.util.Stack;
-import card.*;
-import solitaire.SolitaireDisplay;
+
+import card.Cards;
 
 /**
  * Base class for solitaire logic classes
  * @author bhavi
  *
  */
-public abstract class BaseSolitare {
+public abstract class AbstractSolitaire {
 
 	public abstract Cards getStockCard();
 
@@ -19,4 +19,5 @@ public abstract class BaseSolitare {
 
 	public abstract Stack<Cards> getPile(Stack<Cards> col1);
 
+	public abstract Stack<Stack<Cards>> getAllPiles();
 }
