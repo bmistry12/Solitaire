@@ -1,21 +1,22 @@
-package solitaireAI;
+package solitaireComp;
 
 import java.util.Stack;
 
-import base.BaseSolitare;
+import base.AbstractSolitaire;
 import card.Cards;
 import card.Deck;
 import card.Value;
+import main.Home;
 import solitaire.Solitaire;
 
 /**
- * AI Solitaire Logic 
- * TO DO - implement it
+ * AI Solitaire Logic TO DO - implement it
+ * 
  * @author bhavi
  *
  */
-public class AISolitaire extends BaseSolitare{
-	
+public class CompSolitaire extends AbstractSolitaire {
+
 	public static Stack<Cards> col1;
 	public static Stack<Cards> col2;
 	public static Stack<Cards> col3;
@@ -24,44 +25,51 @@ public class AISolitaire extends BaseSolitare{
 	public static Stack<Cards> col6;
 	public static Stack<Cards> col7;
 
+	private boolean running = true;
 	private Stack<Cards> wasteDeck = new Stack<Cards>();
 	private Deck stockDeck;
 	private Stack<Cards>[] foundation;
-	private AIDisplay display;
-	
-	/**
-	 * 
-	 * @param solitaire
-	 */
-	public AISolitaire(Solitaire solitare){
-		this.stockDeck = solitare.getStockDeck();
-		this.wasteDeck = solitare.getWasteDeck();
+	private CompDisplay display;
+	private Solver solver;
+
+	public CompSolitaire(Stack<Stack<Cards>> allPiles, Deck stockDeck) {
+		this.stockDeck = stockDeck;
 		foundation = (Stack<Cards>[]) new Stack[4];
-		AISolitaire.col1 = solitare.getColumn1();
-		AISolitaire.col2 = solitare.getColumn2();
-		AISolitaire.col3 = solitare.getColumn3();
-		AISolitaire.col4 = solitare.getColumn4();
-		AISolitaire.col5 = solitare.getColumn5();
-		AISolitaire.col6 = solitare.getColumn6();
-		AISolitaire.col7 = solitare.getColumn7();
-		display = new AIDisplay(this);
-		
+		col7 = allPiles.pop();
+		col6 = allPiles.pop();
+		col5 = allPiles.pop();
+		col4 = allPiles.pop();
+		col3 = allPiles.pop();
+		col2 = allPiles.pop();
+		col1 = allPiles.pop();
+		initFound();
 	}
+
+	/**
+	 * Initialise each foundation pile
+	 */
+	private void initFound() {
+		for (int i = 0; i < this.foundation.length; i++) {
+			foundation[i] = new Stack<Cards>();
+		}
+	}
+
 	/**
 	 * Get waste deck
+	 * 
 	 * @return
 	 */
-	public Stack<Cards> getWasteDeck(){
+	public Stack<Cards> getWasteDeck() {
 		return wasteDeck;
 	}
-	
+
 	/**
 	 * Get stock deck
 	 */
-	public Deck getStockDeck(){
+	public Deck getStockDeck() {
 		return stockDeck;
 	}
-	
+
 	/**
 	 * Return top card on stock deck
 	 * 
@@ -208,30 +216,6 @@ public class AISolitaire extends BaseSolitare{
 	}
 
 	/**
-	 * Checks if adding to foundation pile is a valid move
-	 * 
-	 * @param card
-	 * @param i
-	 * @return
-	 */
-	private boolean addToFoundation(Cards card, int i) {
-		boolean isValidMove = false;
-		if (foundation[i] == null || foundation[i].isEmpty()) {
-			if (card.getValue() == Value.ACE) {
-				isValidMove = true;
-			}
-		} else {
-			Cards onFound = foundation[i].peek();
-			if (onFound.getSuit() == card.getSuit()) {
-				if (onFound.valueToInt(onFound.getValue()) + 1 == card.valueToInt(card.getValue())) {
-					isValidMove = true;
-				}
-			}
-		}
-		return isValidMove;
-	}
-
-	/**
 	 * A pile has been clicked - add to pile if valid
 	 * 
 	 * @param pile
@@ -273,6 +257,82 @@ public class AISolitaire extends BaseSolitare{
 			display.selectPile(pile);
 			pile.peek().turnUp();
 		}
+	}
+
+	/**
+	 * Updates the solver and display
+	 */
+	public void update() {
+		while (running) {
+			try {
+				Thread.sleep(2000);
+				solver.update();
+				display.update();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
+	 * Return true if the thread is still running
+	 * 
+	 * @return
+	 */
+	public boolean isRunning() {
+		System.out.println(running);
+		return this.running;
+	}
+
+	/**
+	 * Stops the solver and calls the method in Home to end the thread
+	 */
+	public void stop() {
+		running = false;
+		Home.endCompThread();
+	}
+
+	/**
+	 * Return the display
+	 * 
+	 * @return
+	 */
+	private CompDisplay getDisplay() {
+		return display;
+	}
+
+	/**
+	 * Return all the foundation piles
+	 * 
+	 * @return
+	 */
+	private Stack<Cards>[] getAllFoundation() {
+		return this.foundation;
+	}
+
+	/**
+	 * Checks if adding to foundation pile is a valid move
+	 * 
+	 * @param card
+	 * @param i
+	 * @return
+	 */
+	private boolean addToFoundation(Cards card, int i) {
+		boolean isValidMove = false;
+		if (foundation[i] == null || foundation[i].isEmpty()) {
+			if (card.getValue() == Value.ACE) {
+				isValidMove = true;
+			}
+		} else {
+			Cards onFound = foundation[i].peek();
+			if (onFound.getSuit() == card.getSuit()) {
+				if (onFound.valueToInt(onFound.getValue()) + 1 == card.valueToInt(card.getValue())) {
+					isValidMove = true;
+				}
+			}
+		}
+		return isValidMove;
 	}
 
 	/**
@@ -390,5 +450,26 @@ public class AISolitaire extends BaseSolitare{
 			temp = col7;
 		}
 		return temp;
+	}
+
+	@Override
+	public Stack<Stack<Cards>> getAllPiles() {
+		Stack<Stack<Cards>> all = new Stack<Stack<Cards>>();
+		all.push(col1);
+		all.push(col2);
+		all.push(col3);
+		all.push(col4);
+		all.push(col5);
+		all.push(col6);
+		all.push(col7);
+		return all;
+	}
+
+	@Override
+	public void run() {
+		display = new CompDisplay(this.getAllPiles(), this);
+		solver = new Solver(this.getWasteDeck(), this.getStockDeck(), this.getAllFoundation(), this.getAllPiles(),
+				this.getDisplay());
+		update();
 	}
 }

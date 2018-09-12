@@ -9,7 +9,7 @@ import card.Cards;
  * @author bhavi
  *
  */
-public abstract class AbstractSolitaire {
+public abstract class AbstractSolitaire implements Runnable {
 
 	public abstract Cards getStockCard();
 

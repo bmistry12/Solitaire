@@ -39,11 +39,8 @@ public class Solitaire extends AbstractSolitaire {
 	public Solitaire() {
 		startDeck = new Deck();
 		foundation = (Stack<Cards>[]) new Stack[4];
-		display = new SolitaireDisplay(this);
 		deal();
-		printCurrentCol();
-		timer = new Timer();
-		moves = 0;
+		printCurrentCol(); //for debugging
 	}
 
 	/**
@@ -61,34 +58,6 @@ public class Solitaire extends AbstractSolitaire {
 		all.push(col6);
 		all.push(col7);
 		return all;
-	}
-
-	public Stack<Cards> getColumn1() {
-		return col1;
-	}
-
-	public Stack<Cards> getColumn2() {
-		return col2;
-	}
-
-	public Stack<Cards> getColumn3() {
-		return col3;
-	}
-
-	public Stack<Cards> getColumn4() {
-		return col4;
-	}
-
-	public Stack<Cards> getColumn5() {
-		return col5;
-	}
-
-	public Stack<Cards> getColumn6() {
-		return col6;
-	}
-
-	public Stack<Cards> getColumn7() {
-		return col7;
 	}
 
 	/**
@@ -184,9 +153,7 @@ public class Solitaire extends AbstractSolitaire {
 	}
 
 	/**
-	 * deal primary set up of deck with the last card on the deck turned up col1
-	 * - 1 card col2 - 2 cards col3 - 3 cards col4 - 4 cards col5 - 5 cards col6
-	 * - 6 cards col7 - 7 cards
+	 * Deal primary set up of deck with the last card on the deck turned up 
 	 */
 	private void deal() {
 		startDeck.shuffleDeck();
@@ -524,7 +491,18 @@ public class Solitaire extends AbstractSolitaire {
 		return this.timer;
 	}
 
+	/**
+	 * Get the total number of moves made
+	 * @return
+	 */
 	public int getMoves() {
 		return this.moves;
+	}
+
+	@Override
+	public void run() {
+		display = new SolitaireDisplay(this);
+		timer = new Timer();
+		moves = 0;
 	}
 }

@@ -1,4 +1,4 @@
-package solitaireAI;
+package solitaireComp;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,27 +9,36 @@ import java.util.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import base.AbstractDisplay;
 import card.Cards;
+import solitaire.EndDialog;
 import solitaire.Solitaire;
 
-public class AIDisplay extends AbstractDisplay {
+public class CompDisplay extends AbstractDisplay {
 
-	private AISolitaire aiSolitare;
-
+	private CompSolitaire aiSolitaire;
+	private Stack<Stack<Cards>> allPiles;
+	
 	/**
 	 * Create a new ai solitaire window
 	 * 
 	 * @param aisolitare
+	 * @param solver 
 	 */
-	public AIDisplay(AISolitaire aisolitare) {
+	public CompDisplay(Stack<Stack<Cards>> allPiles, CompSolitaire aisolitare) {
 		super(aisolitare);
-		this.getFrame().setTitle("AI Solitaire");
+		this.getFrame().setTitle("Computer Play Solitaire");
 		this.setColour(Color.LIGHT_GRAY);
-		this.aiSolitare = aisolitare;
+		this.allPiles = allPiles;
+		this.aiSolitaire = aisolitare;
 	}
 
+	public void update(){
+		System.out.println("repaint");
+		this.repaint();
+	}
 	/**
 	 * Unselect a card
 	 */
@@ -85,6 +94,14 @@ public class AIDisplay extends AbstractDisplay {
 	public void selectPile(Stack<Cards> pile) {
 		selectedRow = 1;
 		selectedCol = Solitaire.pileToInt(pile);
+	}
+
+	@Override
+	public void endGame(int complete) {
+		// TODO Auto-generated method stub
+		System.err.println("EndGame");
+		JOptionPane.showMessageDialog(this, "Quit the game", null, JOptionPane.PLAIN_MESSAGE);
+		aiSolitaire.stop();
 	}
 
 }

@@ -1,7 +1,7 @@
 package main;
 
 import solitaire.Solitaire;
-import solitaireAI.AISolitaire;
+import solitaireComp.CompSolitaire;
 
 import java.awt.Cursor;
 import java.awt.EventQueue;
@@ -12,23 +12,29 @@ import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 /**
- * Home Screen - main method
+ * Home Screen - Contains Main Method.
+ * This is where it all runs from
  * 
  * @author bhavi
  */
+@SuppressWarnings("serial")
 public class Home extends JFrame {
 
 	private JButton standardButton;
-	private JButton jButton2;
+	private JButton compModeButton;
 	private JMenu fileMenu;
 	private JMenuBar menuBar;
 	private JMenuItem exitItem;
 	private JPanel panel;
 
+	private Thread sol;
+	private static Thread compSol;
+
 	/**
 	 * Creates new form NewJFrame
 	 */
 	public Home() {
+		this.setTitle("Welcome To Solitaire");
 		initComponents();
 	}
 
@@ -38,7 +44,7 @@ public class Home extends JFrame {
 	private void initComponents() {
 		panel = new JPanel();
 		standardButton = new JButton();
-		jButton2 = new JButton();
+		compModeButton = new JButton();
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu();
 		exitItem = new JMenuItem();
@@ -53,11 +59,11 @@ public class Home extends JFrame {
 			}
 		});
 
-		jButton2.setIcon(new ImageIcon("img/buttons/ai.gif"));// ai
-		jButton2.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-		jButton2.addActionListener(new ActionListener() {
+		compModeButton.setIcon(new ImageIcon("img/buttons/comp.gif"));// comp
+		compModeButton.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+		compModeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				aiModeActionPerformed(evt);
+				compModeActionPerformed(evt);
 			}
 		});
 
@@ -67,21 +73,21 @@ public class Home extends JFrame {
 				.addGroup(jPanel1Layout.createSequentialGroup().addGap(34, 34, 34)
 						.addComponent(standardButton, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-						.addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
+						.addComponent(compModeButton, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
 						.addGap(34, 34, 34)));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel1Layout.createSequentialGroup().addContainerGap()
 						.addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
 								.addComponent(standardButton, GroupLayout.Alignment.TRAILING,
 										GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+								.addComponent(compModeButton, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
 						.addContainerGap(119, Short.MAX_VALUE)));
 
 		fileMenu.setText("File");
 
 		exitItem.setText("Exit");
-		exitItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		exitItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				exitActionPerformed(evt);
 			}
 		});
@@ -109,8 +115,17 @@ public class Home extends JFrame {
 	 * 
 	 * @param evt
 	 */
-	private void exitActionPerformed(java.awt.event.ActionEvent evt) {
-		System.exit(0);
+	private void exitActionPerformed(ActionEvent evt) {
+		try {
+			if (sol != null) {
+				sol.join();
+			}
+			if (compSol != null) {
+				compSol.join();
+			}
+		} catch (InterruptedException e) {
+			e.getMessage();
+		}
 	}
 
 	/**
@@ -118,19 +133,38 @@ public class Home extends JFrame {
 	 * 
 	 * @param evt
 	 */
-	private void standardModeActionPerformed(java.awt.event.ActionEvent evt) {
+	private void standardModeActionPerformed(ActionEvent evt) {
 		Solitaire solitaire = new Solitaire();
+		if (sol == null) {
+			sol = new Thread(solitaire);
+			sol.start();
+		}
 	}
 
 	/**
-	 * Action code for when the AI mode of solitaire is pressed
+	 * Action code for when the Comp mode of solitaire is pressed
 	 * 
 	 * @param evt
+	 * @throws InterruptedException
 	 */
-	private void aiModeActionPerformed(java.awt.event.ActionEvent evt) {
+	private void compModeActionPerformed(ActionEvent evt) {
 		Solitaire solitaire = new Solitaire();
-		AISolitaire ai = new AISolitaire(solitaire.getAllPiles(), solitaire.getStockDeck());
-
+		CompSolitaire comp = new CompSolitaire(solitaire.getAllPiles(), solitaire.getStockDeck());
+		if (compSol == null) {
+			compSol = new Thread(comp);
+			compSol.start();
+		}
+	}
+	
+	/**
+	 * Method called from CompSolitaire. Allows us to end the game from file>exit
+	 */
+	public static void endCompThread() {
+		try {
+			compSol.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -150,7 +184,6 @@ public class Home extends JFrame {
 				| UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
 		}
-
 		// Create and display the frame
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
